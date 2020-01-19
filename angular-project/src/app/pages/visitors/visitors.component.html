@@ -1,0 +1,54 @@
+<ac-toolbar></ac-toolbar>
+
+<ac-container>
+
+  <div class="table-responsive" *ngIf="visitors && visitors.length > 0; else emptyList">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Document</th>
+        <th scope="col">Email</th>
+        <th scope="col" wd-auto>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let visitor of visitors">
+        <th scope="row">{{visitor?.id}}</th>
+        <td>{{visitor?.name}}</td>
+        <td>{{visitor?.document}}</td>
+        <td>{{visitor?.email}}</td>
+        <td wd-auto>
+          <button type="button" class="btn btn-primary btn-sm" (click)="checkinVisitor(true)">
+            Checkin
+          </button>
+          <button type="button" class="btn btn-primary btn-sm" [routerLink]="['visitor-form', visitor.id]">
+            Edit
+          </button>
+
+          <button type="button" class="btn text-danger btn-sm"
+                  (click)="alertRemoveVisitor(modalRemoveVisitor, visitor.id)">
+            Remove
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <ng-template #emptyList>
+    <div class="alert alert-info" role="alert">
+      No registered visitors. <a [routerLink]="['visitor-form']" class="alert-link">New Visitor</a>
+    </div>
+  </ng-template>
+
+</ac-container>
+
+<ng-template #modalRemoveVisitor>
+  <div class="modal-body text-center">
+    <p>Deseja remover cadastro?</p>
+    <button type="button" class="btn btn-default text-danger" (click)="confirmRemoveVisitor(true)">Sim</button>
+    <button type="button" class="btn btn-primary" (click)="confirmRemoveVisitor(false)">Não</button>
+  </div>
+</ng-template>

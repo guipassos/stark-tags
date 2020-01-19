@@ -1,0 +1,35 @@
+<ac-toolbar></ac-toolbar>
+
+<ac-container>
+
+  <form id="visitorForm" [formGroup]="visitorForm" [loader]="isLoading">
+    <div class="form-row">
+      <div class="form-group col-12">
+        <label for="inputName">Name</label>
+        <input type="text" class="form-control" [ngClass]="checkInvalid('name')"
+               id="inputName" placeholder="Bob" formControlName="name">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputDoc">Document</label>
+        <input type="text" class="form-control" [ngClass]="checkInvalid('document')"
+               mask="000.000.000-00" [showMaskTyped]="true"
+               id="inputDoc" placeholder="000.000.000-00" formControlName="document">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputBirth">Date of Birth</label>
+        <input type="text" class="form-control" [ngClass]="checkInvalid('date_of_birth')"
+               mask="00/00/0000" [showMaskTyped]="true"
+               id="inputBirth" placeholder="01/01/2000" formControlName="date_of_birth">
+      </div>
+      <div class="form-group col-md-6">
+        <label for="inputEmail">Email</label>
+        <input type="email" class="form-control" [ngClass]="checkInvalid('email')"
+               id="inputEmail" placeholder="visitor@stark.com" formControlName="email">
+      </div>
+    </div>
+    <button class="btn btn-primary btnSubmit" [disabled]="visitorForm.invalid" (click)="setVisitor()">
+      <span>Save</span>
+    </button>
+  </form>
+
+</ac-container>
