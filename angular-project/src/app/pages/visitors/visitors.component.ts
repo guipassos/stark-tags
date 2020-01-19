@@ -30,6 +30,7 @@ export class VisitorsComponent implements OnInit {
    */
   async getVisitors(): Promise<void> {
     await this.visitorsService.getVisitors().then((visitors: VisitorModel[]) => {
+      console.log(visitors);
       this.visitors = visitors;
     });
   }

@@ -16,27 +16,15 @@ export class VisitorsService {
    * @returns A Promise that resolves to 'VisitorModel[]' when the request is succeeds or fail.
    */
   getVisitors(): Promise<VisitorModel[]> {
-    return new Promise((resolve) => {
-
-      this.storageService.asPromisable().get('visitors')
-        .then((data: string) => {
-
-          if (data) {
-
-            let visitors: VisitorModel[] = JSON.parse(data);
+      return new Promise((resolve, reject) => {
+        this.http.get('http://stark-tags.loc/api/visitors')
+          .subscribe((visitors: VisitorModel[]) => {
             resolve(visitors);
-
-          } else {
-            resolve([]);
-          }
-
-        })
-        .catch((e) => {
-          console.error(e);
-          resolve([]);
-        });
-
-    });
+          }, (error: HttpErrorResponse) => {
+            console.error(error);
+            reject('Unable to check in. (Cod.: ${error.status})');
+          });
+      });
   }
 
   /**
@@ -154,8 +142,6 @@ export class VisitorsService {
    * or is rejected to 'string error' on error.
    */
   checkinVisitor(id: number) {
-
-    //getVehiclesBrands(): Promise<VehicleBrandModel[]> {
       return new Promise((resolve, reject) => {
         this.http.post('http://stark-tags.loc/api/checklist/checkin', {'visitor_id':'6','room_id':'1'})
           .subscribe((visitors: VisitorModel[]) => {

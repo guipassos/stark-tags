@@ -21,7 +21,6 @@ import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.compo
 import {ToolbarComponent} from './shared/components/toolbar/toolbar.component';
 
 import {VisitorsService} from './services/visitors/visitors.service';
-import {VehiclesService} from './services/vehicles/vehicles.service';
 
 @NgModule({
   declarations: [
@@ -49,7 +48,6 @@ import {VehiclesService} from './services/vehicles/vehicles.service';
     {provide: TOAST_NOTIFICATIONS_CONFIG, useValue: {duration: 6000, preventDuplicates: true, position: 'bottom-right'}},
     {provide: LocationStrategy, useClass: HashLocationStrategy},
     VisitorsService,
-    VehiclesService
   ],
   bootstrap: [
     AppComponent
