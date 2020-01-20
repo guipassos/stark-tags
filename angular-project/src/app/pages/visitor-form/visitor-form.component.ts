@@ -22,11 +22,11 @@ export class VisitorFormComponent implements OnInit {
               private toaster: Toaster,) {
 
     this.visitorForm = this.formBuilder.group({
-      id: [Date.now()],
+      id: [],
       name: ['', Validators.compose([Validators.required])],
       document: ['', Validators.compose([Validators.required, validatorCPF()])],
       date_of_birth: [''],
-      email: [''],
+      email: ['', Validators.compose([Validators.email])],
     });
 
   }

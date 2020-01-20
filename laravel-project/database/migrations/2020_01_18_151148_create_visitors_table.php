@@ -17,7 +17,7 @@ class CreateVisitorsTable extends Migration
             $table->bigIncrements('id');
             $table->string('name');
             $table->string('document');
-            $table->date('date_of_birth')->nullable();
+            $table->string('date_of_birth')->nullable();
             $table->string('email')->nullable();
             $table->timestamps();
         });

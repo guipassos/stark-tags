@@ -21,6 +21,7 @@ import {PageNotFoundComponent} from './pages/page-not-found/page-not-found.compo
 import {ToolbarComponent} from './shared/components/toolbar/toolbar.component';
 
 import {VisitorsService} from './services/visitors/visitors.service';
+import {VisitorsInVisitComponent} from './pages/visitors-in-visit/visitors-in-visit.component';
 
 @NgModule({
   declarations: [
@@ -28,6 +29,7 @@ import {VisitorsService} from './services/visitors/visitors.service';
     ContainerComponent,
     VisitorsComponent,
     VisitorFormComponent,
+    VisitorsInVisitComponent,
     PageNotFoundComponent,
     ToolbarComponent
   ],

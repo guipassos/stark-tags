@@ -39,6 +39,7 @@ Configure the laravel .env file to point to your database, and execute below com
 ``` console
 composer install
 php artisan migrate:fresh --seed
+php artisan key:generate
 ```
 ### API's Endpoints
 

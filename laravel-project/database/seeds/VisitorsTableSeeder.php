@@ -13,11 +13,20 @@ class VisitorsTableSeeder extends Seeder
     public function run()
     {
         $faker = \Faker\Factory::create();
+
+        $cpf = [
+            '99396165034', '90576922013', '52973666074',
+            '59379640048', '92901027059', '65268322028',
+            '08758080007', '10088636020', '13398487084',
+            '57981887011', '07029856007', '41123996008',
+            '44854761032', '38617865083', '06829764076',
+        ];
+
         for($i = 0; $i < mt_rand(8,15); $i++) {
             Visitor::create([
                 'name'          => $faker->firstName(),
-                'document'      => mt_rand(100,999).mt_rand(100,999).mt_rand(100,999).mt_rand(10,99),
-                'date_of_birth' => $faker->date(),
+                'document'      => $cpf[array_rand($cpf, 1)],
+                'date_of_birth' => \Carbon\Carbon::parse($faker->date())->format('d/m/Y'),
                 'email'         => $faker->email,
             ]);
         }

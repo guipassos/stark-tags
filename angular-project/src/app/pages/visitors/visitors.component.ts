@@ -50,15 +50,30 @@ export class VisitorsComponent implements OnInit {
   }
 
   /**
-   * Get visitors list.
+   * Visitor checkin
    * * @returns A new void Promise.
    */
-  async checkinVisitor(id: number): Promise<void> {
-    await this.visitorsService.checkinVisitor(id).then((msg: string) => {
+  async checkinVisitor(visitorId: number, roomId: number): Promise<void> {
+    await this.visitorsService.checkinVisitor(visitorId, roomId).then((msg: string) => {
       this.toaster.open(msg, {type: 'success'});
       this.getVisitors();
     }).catch((e: string) => {
       console.error(e);
+      this.toaster.open(e, {type: 'danger'});
+    });
+  }
+
+  /**
+   * Visitor checkout
+   * * @returns A new void Promise.
+   */
+  async checkoutVisitor(visitorId: number): Promise<void> {
+    await this.visitorsService.checkoutVisitor(visitorId).then((msg: string) => {
+      this.toaster.open(msg, {type: 'success'});
+      this.getVisitors();
+    }).catch((e: string) => {
+      console.error(e);
+      this.toaster.open(e, {type: 'danger'});
     });
   }
 

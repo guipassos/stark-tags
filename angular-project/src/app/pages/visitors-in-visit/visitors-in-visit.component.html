@@ -1,0 +1,32 @@
+<ac-toolbar></ac-toolbar>
+
+<ac-container>
+
+  <div class="table-responsive">
+    <table class="table table-striped">
+      <thead>
+      <tr>
+        <th scope="col">ID</th>
+        <th scope="col">Name</th>
+        <th scope="col">Document</th>
+        <th scope="col">Checkin</th>
+        <th scope="col" wd-auto>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr *ngFor="let visitor of visitors">
+        <th scope="row">{{visitor?.visitor?.id}}</th>
+        <td>{{visitor?.visitor?.name}}</td>
+        <td>{{visitor?.visitor?.document}}</td>
+        <td>{{visitor?.checkin | date:'dd/MM/yyyy : HH:mm' }}</td>
+        <td wd-auto>
+          <button type="button" class="btn btn-primary btn-sm margin-right" (click)="checkoutVisitor(visitor.visitor.id)">
+            Checkout
+          </button>
+        </td>
+      </tr>
+      </tbody>
+    </table>
+  </div>
+
+</ac-container>

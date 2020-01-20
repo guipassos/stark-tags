@@ -26,7 +26,7 @@ class StoreVisitorRequest extends FormRequest
         return [
             'name'          => 'required|string',
             'document'      => 'required|string',
-            'date_of_birth' => 'nullable|date',
+            'date_of_birth' => 'nullable|string',
             'email'         => 'nullable|email',
         ];
     }

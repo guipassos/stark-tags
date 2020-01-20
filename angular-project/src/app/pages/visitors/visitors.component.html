@@ -20,7 +20,7 @@
         <td>{{visitor?.document}}</td>
         <td>{{visitor?.email}}</td>
         <td wd-auto>
-          <button type="button" class="btn btn-primary btn-sm margin-right" (click)="checkinVisitor(true)">
+          <button type="button" class="btn btn-primary btn-sm margin-right" (click)="checkinVisitor(visitor.id, 1)">
             Checkin
           </button>
           <button type="button" class="btn btn-primary btn-sm" [routerLink]="['visitor-form', visitor.id]">

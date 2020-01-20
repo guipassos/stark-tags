@@ -2,6 +2,7 @@ import {VisitorModel} from '../../models/visitor.model';
 import {Injectable} from '@angular/core';
 import {HttpClient, HttpErrorResponse} from '@angular/common/http';
 import {LocalStorageService} from 'ngx-localstorage';
+import {API_URL} from '../../../config';
 
 @Injectable({
   providedIn: 'root'
@@ -17,34 +18,29 @@ export class VisitorsService {
    */
   getVisitors(): Promise<VisitorModel[]> {
       return new Promise((resolve, reject) => {
-        this.http.get('http://stark-tags.loc/api/visitors')
-          .subscribe((visitors: VisitorModel[]) => {
-            resolve(visitors);
+        this.http.get(`${ API_URL }visitors`)
+          .subscribe((visitors: {data: VisitorModel[]}) => {
+            resolve(visitors.data);
           }, (error: HttpErrorResponse) => {
             console.error(error);
-            reject('Unable to check in. (Cod.: ${error.status})');
+            reject(`Unable to check in. (Cod.: ${error.status})`);
           });
       });
   }
 
   /**
-   * Set a list of visitors.
-   * @param visitors A array of visitors.
-   * @returns A Promise that resolves to 'string message' when the request is succeeds,
-   * or is rejected to 'string error' on error.
+   * Get a list of visitors in visit.
+   * @returns A Promise that resolves to 'VisitorModel[]' when the request is succeeds or fail.
    */
-  setVisitors(visitors: VisitorModel[]) {
+  getVisitorsInVisit(): Promise<VisitorModel[]> {
     return new Promise((resolve, reject) => {
-
-      this.storageService.asPromisable().set('visitors', JSON.stringify(visitors))
-        .then((confirm: boolean) => {
-          resolve(confirm ? 'Registration successfully saved!' : 'Unable to save registration.');
-        })
-        .catch((e) => {
-          console.error(e);
-          reject('Unable to save registration.');
+      this.http.get(`${ API_URL }checklist/in-visit`)
+        .subscribe((visitors: {data: any[]}) => {
+          resolve(visitors.data);
+        }, (error: HttpErrorResponse) => {
+          console.error(error);
+          reject(`Unable to check in. (Cod.: ${error.status})`);
         });
-
     });
   }
 
@@ -54,28 +50,20 @@ export class VisitorsService {
    * @returns A Promise that resolves to 'string message' when the request is succeeds,
    * or is rejected to 'string error' on error.
    */
-  setVisitor(visitor: VisitorModel): Promise<string> {
+  setVisitor(visitor: any): Promise<string> {
     return new Promise((resolve, reject) => {
+      let link = `${ API_URL }visitors`;
+      if (visitor.id) {
+        link = `${ API_URL }/${ visitor.id }`;
+      }
 
-      this.getVisitors().then((visitors: VisitorModel[]) => {
-
-        const index = visitors.findIndex(item => item.id == visitor.id);
-
-        if (index > -1) {
-          visitors[index] = visitor;
-        } else {
-          visitors.push(visitor);
-        }
-
-        this.setVisitors(visitors)
-          .then(() => resolve('Registration saved successfully!'))
-          .catch((e: string) => {
-            console.error(e);
-            reject('Unable to save registration.');
-          });
-
-      });
-
+      this.http.post(link, visitor)
+        .subscribe(() => {
+          resolve('Visitor saved');
+        }, (error: HttpErrorResponse) => {
+          console.error(error);
+          reject(`Unable to save visitor. (Cod.: ${error.status})`);
+        });
     });
   }
 
@@ -105,53 +93,74 @@ export class VisitorsService {
 
   /**
    * Remove a visitor by id.
-   * @param id The id of visitor.
    * @returns A Promise that resolves to 'string message' when the request is succeeds,
    * or is rejected to 'string error' on error.
+   * @param visitorId
    */
-  removeVisitor(id: number) {
+  removeVisitor(visitorId: number) {
     return new Promise((resolve, reject) => {
-
-      this.getVisitors().then((visitors: VisitorModel[]) => {
-
-        const index = visitors.findIndex(item => item.id == id);
-
-        if (index > -1) {
-          visitors.splice(index, 1);
-
-          this.setVisitors(visitors)
-            .then(() => resolve('Registration removed successfully!'))
-            .catch((e: string) => {
-              console.error(e);
-              reject('Unable to remove registration.');
-            });
-
-        } else {
-          reject('Registration not found.');
-        }
-
-      });
-
+      this.http.delete(`${ API_URL }/visitors/${visitorId}`)
+        .subscribe(() => {
+          resolve('Visitor removed');
+        }, (error: HttpErrorResponse) => {
+          console.error(error);
+          reject(`Unable to remove visitor. (Cod.: ${error.status})`);
+        });
     });
   }
 
   /**
    * Checkin a visitor by id.
-   * @param id The id of visitor.
    * @returns A Promise that resolves to 'string message' when the request is succeeds,
    * or is rejected to 'string error' on error.
+   * @param visitorId, roomId
    */
-  checkinVisitor(id: number) {
+  checkinVisitor(visitorId: number, roomId: number) {
       return new Promise((resolve, reject) => {
-        this.http.post('http://stark-tags.loc/api/checklist/checkin', {'visitor_id':'6','room_id':'1'})
-          .subscribe((visitors: VisitorModel[]) => {
-            resolve(visitors);
+        this.http.post(`${ API_URL }checklist/checkin`, {visitor_id: visitorId, room_id: roomId})
+          .subscribe(() => {
+            resolve('Checkin success');
           }, (error: HttpErrorResponse) => {
             console.error(error);
             reject(`Unable to check in. (Cod.: ${error.status})`);
           });
-
       });
+  }
+
+  /**
+   * Checkin a visitor by id.
+   * @returns A Promise that resolves to 'string message' when the request is succeeds,
+   * or is rejected to 'string error' on error.
+   * @param visitorId, roomId
+   */
+  checkoutVisitor(visitorId: number) {
+    return new Promise((resolve, reject) => {
+      this.http.post(`${ API_URL }checklist/checkout`, {visitor_id: visitorId})
+        .subscribe(() => {
+          resolve('Checkout success');
+        }, (error: HttpErrorResponse) => {
+          console.error(error);
+          reject(`Unable to check out. (Cod.: ${error.status})`);
+        });
+    });
+  }
+
+  /**
+   * Checkin a visitor by id.
+   * @returns A Promise that resolves to 'string message' when the request is succeeds,
+   * or is rejected to 'string error' on error.
+   * @param visitorId, roomId
+   */
+  checklistInVisit() {
+    return new Promise((resolve, reject) => {
+      this.http.get(`${ API_URL }checklist/in-visit`,)
+        .subscribe(() => {
+          resolve('Checkin success');
+        }, (error: HttpErrorResponse) => {
+          console.error(error);
+          reject(`Unable to check in. (Cod.: ${error.status})`);
+        });
+    });
   }
 
 }
