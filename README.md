@@ -51,6 +51,7 @@ php artisan key:generate
 
 * Clone Frontend repository.
 * Run `npm install` to get dependencies.
+* Configure your api link in the file "src/config.ts"
 * Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory. Use the `--prod` flag for a production build.
 
 
